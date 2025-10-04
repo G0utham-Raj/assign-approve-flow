@@ -15,14 +15,15 @@ interface Approver {
 }
 
 export const ApprovalRulesForm = () => {
-  const [userName, setUserName] = useState("");
-  const [manager, setManager] = useState("Sarah");
+  const [userName, setUserName] = useState("marc");
+  const [manager, setManager] = useState("sarah");
   const [isManagerApprover, setIsManagerApprover] = useState(false);
   const [approvalSequence, setApprovalSequence] = useState(false);
   const [minApprovalPercentage, setMinApprovalPercentage] = useState(50);
   const [approvers, setApprovers] = useState<Approver[]>([
-    { id: "1", name: "John Doe", required: false },
-    { id: "2", name: "Jane Smith", required: false },
+    { id: "1", name: "John", required: true },
+    { id: "2", name: "Mitchell", required: false },
+    { id: "3", name: "Andreas", required: false },
   ]);
   const [newApproverName, setNewApproverName] = useState("");
 
@@ -53,26 +54,37 @@ export const ApprovalRulesForm = () => {
   };
 
   const handleSave = () => {
+    const payload = {
+      user: userName,
+      manager,
+      isManagerApprover,
+      approvers,
+      sequenceEnabled: approvalSequence,
+      minApprovalPercent: minApprovalPercentage,
+    };
+    console.log("Saved Rule:", payload);
+    
     toast({
       title: "Approval Rule Saved",
-      description: `Rule for ${userName} has been successfully saved.`,
+      description: `Rule for ${userName} has been successfully saved. Check console for payload.`,
     });
   };
 
   const handleReset = () => {
-    setUserName("");
-    setManager("Sarah");
+    setUserName("marc");
+    setManager("sarah");
     setIsManagerApprover(false);
     setApprovalSequence(false);
     setMinApprovalPercentage(50);
     setApprovers([
-      { id: "1", name: "John Doe", required: false },
-      { id: "2", name: "Jane Smith", required: false },
+      { id: "1", name: "John", required: true },
+      { id: "2", name: "Mitchell", required: false },
+      { id: "3", name: "Andreas", required: false },
     ]);
     setNewApproverName("");
     toast({
       title: "Form Reset",
-      description: "All fields have been cleared.",
+      description: "All fields have been reset to defaults.",
     });
   };
 
@@ -100,10 +112,9 @@ export const ApprovalRulesForm = () => {
                 <SelectValue placeholder="Select manager" />
               </SelectTrigger>
               <SelectContent className="bg-popover z-50">
-                <SelectItem value="Sarah">Sarah</SelectItem>
-                <SelectItem value="Michael">Michael</SelectItem>
-                <SelectItem value="Jennifer">Jennifer</SelectItem>
-                <SelectItem value="David">David</SelectItem>
+                <SelectItem value="sarah">Sarah</SelectItem>
+                <SelectItem value="alex">Alex</SelectItem>
+                <SelectItem value="priya">Priya</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -131,7 +142,7 @@ export const ApprovalRulesForm = () => {
           </div>
 
           <div className="space-y-3">
-            <Label>Approvers</Label>
+            <Label className="font-semibold">Approvers</Label>
             <div className="space-y-2">
               {approvers.map((approver) => (
                 <div
@@ -192,7 +203,7 @@ export const ApprovalRulesForm = () => {
               htmlFor="approval-sequence"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
             >
-              Approval Sequence
+              Enable Approvers Sequence
             </Label>
           </div>
 
